@@ -26,7 +26,7 @@ class FriendlyName:
                 return
 
     def __str__(self):
-        return f'friendly name: {self.name} \n'
+        return f'friendly name: {self.name}'
 
     def generate_friendly_name(self):
         self.color = random.choice(FriendlyName.color)
