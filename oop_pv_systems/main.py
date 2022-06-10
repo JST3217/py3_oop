@@ -4,9 +4,7 @@ import simpy
 
 env = simpy.Environment()
 
-
 x = [Battery() for _ in range(2)]
 
-for __ in range(len(x)):
-    print(x[__])
-
+for count, __ in enumerate(x):
+    print(__)
