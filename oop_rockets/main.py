@@ -1,5 +1,9 @@
 from rocket_classes import *
 
+
+NUMBER_OF_ROCKETS = 4
+RANDOM_SEED = 98
+
 aspera = {
     "name": "ASPERA",
     "mass": 11,
@@ -12,8 +16,6 @@ spicam = {
     "name": "SPICAM",
     "mass": 73,
 }
-
-payload_list = [aspera, vera, spicam]
 
 falcon_1 = {
     "name": "Falcon 1",
@@ -40,8 +42,6 @@ vega = {
     "speed": 280,
 }
 
-launch_vehicle_list = [falcon_1, falcon_9, falcon_heavy, starship, ariane_5, vega]
-
 baikonor = {
     "name": "Baikonur Cosmodrome",
     "longitude": 46,
@@ -58,39 +58,66 @@ guiana = {
     "latitude": -53,
 }
 
-launch_site_list = [baikonor, cape, guiana]
 
-payload = []
-for __ in range(len(payload_list)):
-    payload.append(Payload(payload_list[__]["name"],
-                                          payload_list[__]["mass"]))
+def setup():
+    """
+    The setup function creates a list of payloads, launch vehicles, and launch sites.
+    The lists are then returned to the main function.
 
-launch_vehicle = []
-for __ in range(len(launch_vehicle_list)):
-    launch_vehicle.append(LaunchVehicle(launch_vehicle_list[__]["name"],
-                                                       launch_vehicle_list[__]["speed"]))
+    return: a list of payload, launch vehicle and launch site as objects
+    """
+    payload_list = [aspera, vera, spicam]
+    launch_vehicle_list = [falcon_1, falcon_9, falcon_heavy, starship, ariane_5, vega]
+    launch_site_list = [baikonor, cape, guiana]
 
-launch_site = []
-for __ in range(len(launch_site_list)):
-    launch_site.append(LaunchSite(launch_site_list[__]["name"],
-                                                 launch_site_list[__]["longitude"],
-                                                 launch_site_list[__]["latitude"]))
+    payload = []
+    for _, __ in enumerate(payload_list):
+        payload.append(Payload(__.get('name'), __.get('mass')))
 
-NUMBER_OF_ROCKETS = 4
+    launch_vehicle = []
+    for _, __ in enumerate(launch_vehicle_list):
+        launch_vehicle.append(LaunchVehicle(__.get('name'), __.get('speed')))
 
-launch_1 = RocketFleet(NUMBER_OF_ROCKETS, launch_vehicle, payload)
-print(launch_1)
-for __ in range(len(launch_1)):
-    chosen_launch_site = random.choice(launch_site)
-    chosen_launch_angle = random.randrange(-90, 90 + 1, 5)
-    print(f'launching...\n'
-          f'  LV: {launch_1[__].launch_vehicle.name}\n'
-          f'  PL: {launch_1[__].payload.name}\n'
-          f'  LS: {chosen_launch_site.name} [{chosen_launch_site.longitude},{chosen_launch_site.latitude}]\n'
-          f'  LA: {chosen_launch_angle}deg')
-    launch_1[__].launch(chosen_launch_site, chosen_launch_angle)
+    launch_site = []
+    for _, __ in enumerate(launch_site_list):
+        launch_site.append(LaunchSite(__.get('name'), __.get('longitude'), __.get('latitude')))
 
-# s = RocketFleet.get_distance(launch_1[0], launch_1[1])
-# print(round(s, 2))
-# print(launch_1.number_of_rockets())
-# print(Rocket.next_id)
+    return payload, launch_vehicle, launch_site
+
+
+def run():
+    """
+    The run function launches a fleet of rockets.
+
+    The run function launches a fleet of rockets, each with its own payload and launch vehicle.
+    The number of rockets to be launched is specified by the user.
+    Each rocket has an independent probability to choose a random launch site from our database.
+
+    return: The rocket fleet
+    """
+    launch = RocketFleet(NUMBER_OF_ROCKETS, launch_vehicle, payload)
+    print(launch)
+    for _, __ in enumerate(launch):
+        chosen_launch_site = random.choice(launch_site)
+        chosen_launch_angle = random.randrange(-90, 90 + 1, 5)
+        print(f'launching...\n'
+              f'  LV: {__.launch_vehicle.name}\n'
+              f'  PL: {__.payload.name}\n'
+              f'  LS: {chosen_launch_site.name} [{chosen_launch_site.longitude},{chosen_launch_site.latitude}]\n'
+              f'  LA: {chosen_launch_angle}deg')
+
+        # Launch!
+        __.launch(chosen_launch_site, chosen_launch_angle)
+
+    return launch
+
+
+# Setup and start the simulation
+print("Simple rocket simulation")
+random.seed(RANDOM_SEED)  # This helps to reproduce results
+
+# Start the setup process
+payload, launch_vehicle, launch_site = setup()
+
+# Launch!
+launch_01 = run()
