@@ -1,8 +1,10 @@
 from rocket_classes import *
 
 
-NUMBER_OF_ROCKETS = 4
-RANDOM_SEED = 98
+class G:
+    NUMBER_OF_ROCKETS = 4
+    RANDOM_SEED = 98
+
 
 aspera = {
     "name": "ASPERA",
@@ -95,7 +97,7 @@ def run():
 
     return: The rocket fleet
     """
-    launch = RocketFleet(NUMBER_OF_ROCKETS, launch_vehicle, payload)
+    launch = RocketFleet(G.NUMBER_OF_ROCKETS, launch_vehicle, payload)
     print(launch)
     for _, __ in enumerate(launch):
         chosen_launch_site = random.choice(launch_site)
@@ -114,7 +116,7 @@ def run():
 
 # Setup and start the simulation
 print("Simple rocket simulation")
-random.seed(RANDOM_SEED)  # This helps to reproduce results
+random.seed(G.RANDOM_SEED)  # This helps to reproduce results
 
 # Start the setup process
 payload, launch_vehicle, launch_site = setup()
