@@ -1,8 +1,8 @@
 import random
 
 
-RANDOM_SEED = 98
-random.seed(RANDOM_SEED)  # This helps to reproduce results
+# RANDOM_SEED = 98
+# random.seed(RANDOM_SEED)  # This helps to reproduce results
 
 
 class FriendlyName(object):
@@ -21,7 +21,7 @@ class FriendlyName(object):
         """
         self.name = None
         self.counter = 1
-        self.counter_limit = 3
+        self.counter_limit = 5
         while self.name is None:
             self.temp_name = self.generate_friendly_name()
             if FriendlyName.is_unique(self.temp_name, FriendlyName.friendly_name_list):
@@ -29,7 +29,7 @@ class FriendlyName(object):
                 FriendlyName.friendly_name_list.append(self.name)
             elif self.counter < self.counter_limit and FriendlyName.is_unique(self.temp_name,
                                                                               FriendlyName.friendly_name_list) is False:
-                print(f'non unique name generated, [{self.counter}/{self.counter_limit}] tries')
+                print(f'non unique name {self.temp_name} generated, [{self.counter}/{self.counter_limit}] tries')
                 self.counter += 1
             else:
                 print('out of tries, obj cannot be generated.')
